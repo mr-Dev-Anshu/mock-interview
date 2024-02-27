@@ -15,8 +15,8 @@ const Header = () => {
           {/* <img className="h-12" src={v1} alt="" /> */}
         </HashLink>
         <div className="lg:flex hidden text-lg justify-center items-center gap-16">
-          <HashLink to="/">Home</HashLink>
-          {user ? <HashLink to="/makeprofile">CreateProfile</HashLink> : null}
+          <HashLink to="/"> <div className="font-bold  ">Home</div> </HashLink>
+          {user ? <HashLink to="/makeprofile"> <div className="font-bold ">CreateProfile</div> </HashLink> : null}
         </div>
         <div className="lg:flex hidden justify-center items-center gap-12">
           <HashLink>

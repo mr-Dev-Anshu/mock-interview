@@ -20,11 +20,19 @@ const SwiperComponent = () => {
           navigation={true}
           modules={[Autoplay, Pagination, Navigation]}
         >
-        
+          <SwiperSlide>
+            <img
+              className="rounded-lg object-cover w-full h-full "
+              src='https://www.longwood.edu/media/alumni-and-career-services/public-site/iStock-472097889-639x426.jpg'
+              alt=""
+            />
+          </SwiperSlide>
         </Swiper>
       </div>
-      
-    </div> 
+      <div className="lg:hidden w-full h-fit rounded-xl overflow-hidden flex justify-center items-center">
+        <img src="" alt="" />
+      </div>
+    </div>
   );
 };
 

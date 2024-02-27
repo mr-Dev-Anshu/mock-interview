@@ -10,6 +10,7 @@ const CreateProfile = () => {
   const [formData, setFormData] = useState();
   const [file, setFile] = useState();
   const [img, setImg] = useState();
+  const [loading, setLoading] = useState(false);
   const dbconfig = doc(db, "users", user?.uid);
   console.log(file);
   const handlechange = (e) => {
@@ -21,8 +22,10 @@ const CreateProfile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     formData.email = user?.email;
     try {
+      setLoading(true);
       const name = Date.now() + file?.name;
       const storageRef = ref(storage, name);
       const uploadTask = uploadBytesResumable(storageRef, file);
@@ -35,9 +38,11 @@ const CreateProfile = () => {
 
       const newDoc = await setDoc(dbconfig, formData);
       notifySuccess("Profile Create successfull");
+      setLoading(false);
     } catch (error) {
       console.log(error);
       notifyError("Creation field");
+      setLoading(false);
     }
   };
 
@@ -110,7 +115,7 @@ const CreateProfile = () => {
             onClick={handleSubmit}
             className=" p-2 rounded-lg shadow-xl text-xl bg-green-200 font-bold font-serif  "
           >
-            Create
+            {loading ? "Loading..." : "Create"}
           </button>
           <Toaster />
         </form>
