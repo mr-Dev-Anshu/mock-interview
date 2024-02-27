@@ -2,18 +2,33 @@ import React, { useState } from "react";
 
 import { HashLink } from "react-router-hash-link";
 import { FcGoogle } from "react-icons/fc";
-import {useNavigate} from "react-router-dom"
-
+import { useNavigate } from "react-router-dom";
+import { auth } from "../firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { notifyError, notifySuccess } from "../toaster/Toaster";
+import { Toaster } from "react-hot-toast";
 const Login = () => {
   const [formData, setFormData] = useState("");
-  const  navigate = useNavigate() ; 
+  const navigate = useNavigate();
+  const [loading , setLoading] = useState(false )
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-     
+  setLoading(true)
+    const { email, password } = formData;
+    
+    try {
+      const loggedInUser = signInWithEmailAndPassword(auth, email, password);
+      setLoading(false);
+      notifySuccess("Sign in successfully :: ");
+      navigate("/")
+    } catch (error) {
+      notifyError("Sign in field !! ");
+    }
+    setLoading(false) ;
   };
 
   return (
@@ -69,7 +84,7 @@ const Login = () => {
                   className="outline p-3 rounded-md outline-slate-200 bg-blue-600 text-white font-semibold text-xl"
                   type="submit"
                 >
-                  Log in
+                  {loading?"Loadin..":"Log in "}
                 </button>
               </form>
             </div>
@@ -87,6 +102,7 @@ const Login = () => {
           {/* <img className=" object-cover w-full" src={img3} alt="" /> */}
         </div>
       </div>
+      <Toaster /> 
     </div>
   );
 };

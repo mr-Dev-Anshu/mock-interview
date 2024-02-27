@@ -2,20 +2,39 @@ import React, { useState, useContext } from "react";
 import { HashLink } from "react-router-hash-link";
 import { useNavigate } from "react-router-dom";
 import { currentUserContext } from "../context/userContext/CurrentUserProvider";
+import { auth } from "../firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import {notifyError, notifySuccess} from "../toaster/Toaster"
+import { Toaster } from "react-hot-toast";
 const Register = () => {
   const [formData, setFormData] = useState("");
   const navigate = useNavigate();
-  const { currUser } = useContext(currentUserContext);
+  const { currUser  } = useContext(currentUserContext);
+  const [loading , setLoading ] = useState(false) ;
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-   
+    setLoading(true) ; 
+    try {
+      const { email, password } = formData;
+      const addedUser = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      console.log(addedUser);
+
+      notifySuccess("Sign-up successfully ji ")
+      setLoading(false) ;
+      navigate("/") ;
+    } catch (error) {
+      notifyError("Sign up Field ")
+    setLoading(false) ;
+    }
   };
-
-
 
   return (
     <div className="h-screen w-full flex justify-center items-center pt-6">
@@ -37,13 +56,6 @@ const Register = () => {
               >
                 <input
                   className="outline p-3 rounded-md outline-slate-200"
-                  type="text"
-                  id="username"
-                  placeholder="Name"
-                  onChange={handleChange}
-                />
-                <input
-                  className="outline p-3 rounded-md outline-slate-200"
                   type="email"
                   id="email"
                   placeholder="Email"
@@ -60,7 +72,7 @@ const Register = () => {
                   className="outline p-3 rounded-md outline-slate-200 bg-blue-600 text-white font-semibold text-xl"
                   type="submit"
                 >
-                  Register
+                  {loading?"Loading...":"Register"}
                 </button>
               </form>
             </div>
@@ -76,6 +88,7 @@ const Register = () => {
           {/* <img className=" object-cover h-full w-full" src={img3} alt="" /> */}
         </div>
       </div>
+      <Toaster />
     </div>
   );
 };

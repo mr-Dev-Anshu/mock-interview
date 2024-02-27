@@ -7,25 +7,27 @@ import Footer from "./components/Footer";
 import { useContext } from "react";
 import { currentUserContext } from "./context/userContext/CurrentUserProvider";
 import UserProfilePage from "./pages/UserProfilePage";
-import UploadProduct from "./pages/UploadProduct";
-
+import CreateProfile from "./pages/CreateProfile"; 
 function App() {
-  const { currUser } = useContext(currentUserContext);
+  const { user  } = useContext(currentUserContext);
 
   return (
     <Router>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route
-          path={currUser ? "/user" : "/register"}
-          element={currUser ? <UserProfilePage /> : <Register />}
+       <Header />
+       <Routes>
+         <Route path="/" element={<Home />} />
+         <Route
+          path={user ? "/user" : "/register"}
+          element={user  ? <UserProfilePage /> : <Register />}
         />
-        <Route path="/product" element={<UploadProduct />} />
+        <Route path="/login" element={<Login />} />
+         
+        <Route path="/makeprofile" element={<CreateProfile />} />
       </Routes>
       <Footer />
     </Router>
+
+ 
   );
 }
 
